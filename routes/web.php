@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/page', PageController::class);
 
+    Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::post('/bottle-message', [BottleMessageController::class, 'store'])->name('bottleMessage.store');
     Route::post('/quick-thought', [\App\Http\Controllers\QuickThoughtController::class, 'store'])->name('quick-thought.store');

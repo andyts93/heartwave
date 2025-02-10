@@ -57,6 +57,7 @@ class PageController extends Controller
     {
         $page->load([
             'user',
+            'votes' => fn($qb) => $qb->orderByDesc('created_at'),
             'votes.user',
             'votes.comments' => fn($qb) => $qb->with('user')->orderByDesc('created_at'),
             'lastBottleMessage.user',

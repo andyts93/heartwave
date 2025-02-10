@@ -1,7 +1,9 @@
 import { Page } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
@@ -14,8 +16,6 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
-import { useState } from 'react';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export default function BottleMessageForm({ page }: { page: Page }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -35,13 +35,17 @@ export default function BottleMessageForm({ page }: { page: Page }) {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         setIsLoading(true),
-        router.post(route('bottleMessage.store'), {
-            ...values,
-            image: values.image?.[0],
-            page_id: page.id,
-        }, {
-            onFinish: () => setIsLoading(false),
-        });
+            router.post(
+                route('bottleMessage.store'),
+                {
+                    ...values,
+                    image: values.image?.[0],
+                    page_id: page.id,
+                },
+                {
+                    onFinish: () => setIsLoading(false),
+                },
+            );
     };
 
     return (
@@ -85,7 +89,13 @@ export default function BottleMessageForm({ page }: { page: Page }) {
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit" disabled={isLoading}>{isLoading ?  <AiOutlineLoading3Quarters className="animate-spin" /> : 'Throw bottle'}</Button>
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? (
+                            <AiOutlineLoading3Quarters className="animate-spin" />
+                        ) : (
+                            'Throw bottle'
+                        )}
+                    </Button>
                 </div>
             </form>
         </Form>

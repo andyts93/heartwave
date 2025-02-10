@@ -178,7 +178,7 @@ export default function PageView({ page }: { page: Page }) {
                             ) : (
                                 <Card className="mb-4">
                                     <CardContent className="p-4">
-                                        <VoteForm />
+                                        <VoteForm page={page} />
                                     </CardContent>
                                 </Card>
                             )}

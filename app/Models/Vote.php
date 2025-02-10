@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vote extends Model
 {
+    protected $guarded = [];
+    
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class);

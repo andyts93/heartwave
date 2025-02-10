@@ -28,7 +28,12 @@ export default function VoteCard({ vote }: { vote: Vote }) {
                     </span>
                 </div>
                 <p className="mb-4 text-justify">{vote.notes}</p>
-                <img src={vote.image} className="rounded-xl" />
+                {vote.image && (
+                    <img
+                        src={`/storage/${vote.image}`}
+                        className="rounded-xl"
+                    />
+                )}
                 <div className="flex">
                     <Popover>
                         <PopoverTrigger asChild>
