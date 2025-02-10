@@ -37,7 +37,8 @@ class PageController extends Controller
         try {
             $page = Page::query()->create($validatedData);
             // Create the user's page
-            $request->user()->pages()->create([...$validatedData, 'linked_page_id' => $page->id]);
+            $linkedPage = $request->user()->pages()->create([...$validatedData, 'linked_page_id' => $page->id, 'name' => $request->user()->name]);
+            $page->update(['linked_page_id' => $linkedPage->id]);
         } catch (\Exception $exception) {
             Log::error('Unable to create page', [
                 'exception' => $exception->getMessage(),

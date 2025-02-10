@@ -25,7 +25,7 @@ export interface Page {
     created_at: string;
     updated_at: string;
     user: User;
-    linked_page?: Page;
+    linked_page: Page;
     average?: number;
     votes: Vote[];
     last_bottle_message?: BottleMessage;
