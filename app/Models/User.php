@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(BottleMessage::class);
     }
+
+    public function quickThoughts(): HasMany
+    {
+        return $this->hasMany(QuickThought::class);
+    }
 }

@@ -14,8 +14,12 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
+import { useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export default function BottleMessageForm({ page }: { page: Page }) {
+    const [isLoading, setIsLoading] = useState(false);
+
     const formSchema = z.object({
         message: z.string(),
         image: z.instanceof(FileList).optional(),
@@ -30,10 +34,13 @@ export default function BottleMessageForm({ page }: { page: Page }) {
     const fileRef = form.register('image');
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
+        setIsLoading(true),
         router.post(route('bottleMessage.store'), {
             ...values,
             image: values.image?.[0],
             page_id: page.id,
+        }, {
+            onFinish: () => setIsLoading(false),
         });
     };
 
@@ -47,7 +54,7 @@ export default function BottleMessageForm({ page }: { page: Page }) {
                         <FormItem className="flex-1 space-y-0">
                             <FormLabel>Message</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} readOnly={isLoading} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -61,6 +68,7 @@ export default function BottleMessageForm({ page }: { page: Page }) {
                             <FormLabel>Image</FormLabel>
                             <FormControl>
                                 <Input
+                                    readOnly={isLoading}
                                     type="file"
                                     accept="image/*"
                                     {...fileRef}
@@ -77,7 +85,7 @@ export default function BottleMessageForm({ page }: { page: Page }) {
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit">Throw bottle</Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading ?  <AiOutlineLoading3Quarters className="animate-spin" /> : 'Throw bottle'}</Button>
                 </div>
             </form>
         </Form>

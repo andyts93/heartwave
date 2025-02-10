@@ -29,6 +29,7 @@ export interface Page {
     average?: number;
     votes: Vote[];
     last_bottle_message?: BottleMessage;
+    last_quick_thought?: QuickThought;
 }
 
 export interface Vote {
@@ -66,6 +67,16 @@ export interface BottleMessage {
     image: string;
     user_id: number;
     page_id: string;
+    user?: User;
+    page?: Page;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface QuickThought {
+    id: number;
+    emoji: string;
+    unified: string;
     user?: User;
     page?: Page;
     created_at: string;

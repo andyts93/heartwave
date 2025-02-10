@@ -48,4 +48,14 @@ class Page extends Model
     {
         return $this->hasOne(BottleMessage::class)->orderByDesc('created_at');
     }
+
+    public function quickThoughts(): HasMany
+    {
+        return $this->hasMany(QuickThought::class);
+    }
+
+    public function lastQuickThought(): HasOne
+    {
+        return $this->hasOne(QuickThought::class)->orderByDesc('created_at');
+    }
 }

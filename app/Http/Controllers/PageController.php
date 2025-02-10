@@ -58,7 +58,8 @@ class PageController extends Controller
             'user',
             'votes.user',
             'votes.comments' => fn($qb) => $qb->with('user')->orderByDesc('created_at'),
-            'lastBottleMessage.user'
+            'lastBottleMessage.user',
+            'lastQuickThought.user',
         ]);
 
         $page->average = $page->votes()->avg('vote');
