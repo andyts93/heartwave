@@ -82,3 +82,15 @@ export interface QuickThought {
     created_at: string;
     updated_at: string;
 }
+
+export interface Pass {
+    id: number;
+    title: string;
+    description: string;
+    emoji: string;
+    color: string;
+    uses_max: string;
+    uses_left: string;
+    expires_at: string;
+    expired: boolean;
+}

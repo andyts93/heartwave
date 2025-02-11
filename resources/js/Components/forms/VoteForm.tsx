@@ -1,6 +1,7 @@
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -133,7 +134,10 @@ export default function VoteForm({ page }: { page: Page }) {
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
-                                        <Button variant={'outline'}>
+                                        <Button
+                                            variant={'outline'}
+                                            className="block"
+                                        >
                                             {field.value
                                                 ? dayjs(field.value).format(
                                                       'DD/MM/YYYY',

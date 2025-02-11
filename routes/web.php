@@ -26,12 +26,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/page', PageController::class);
+    Route::post('/page', [PageController::class, 'store'])->name('page.store');
+    Route::put('/page/{page}', [PageController::class, 'update'])->name('page.update');
 
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::post('/bottle-message', [BottleMessageController::class, 'store'])->name('bottleMessage.store');
     Route::post('/quick-thought', [\App\Http\Controllers\QuickThoughtController::class, 'store'])->name('quick-thought.store');
 });
+
+Route::get('/page/{page}', [PageController::class, 'show'])->name('page.show');
 
 require __DIR__ . '/auth.php';

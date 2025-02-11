@@ -1,25 +1,50 @@
 import BottleMessageForm from '@/Components/forms/BottleMessageForm';
+import PassForm from '@/Components/forms/PassForm';
 import QuickThoughtForm from '@/Components/forms/QuickThoughtForm';
 import VoteForm from '@/Components/forms/VoteForm';
 import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
+import { Button, buttonVariants } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import { Tooltip, TooltipProvider } from '@/Components/ui/tooltip';
 import VoteCard from '@/Components/VoteCard';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { Page } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip';
 import dayjs from 'dayjs';
 import { Emoji } from 'emoji-picker-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 import { GiSquareBottle } from 'react-icons/gi';
 
 export default function PageView({ page }: { page: Page }) {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { auth } = usePage().props;
-    const isOwner = useMemo(() => auth.user.id === page.user_id, [auth, page]);
-    console.log(isOwner);
+    const loggedUser = useMemo(() => auth.user, [auth]);
+
+    const isOwner = useMemo(
+        () => loggedUser && auth.user.id === page.user_id,
+        [auth, page, loggedUser],
+    );
+
+    const isLinkedPage = useMemo(
+        () => loggedUser && page.linked_page.user_id === auth.user.id,
+        [loggedUser, auth, page],
+    );
+
+    const claim = () => {
+        setIsLoading(true);
+        router.put(
+            route('page.update', { page: page.id }),
+            {
+                operation: 'claim',
+            },
+            { onFinish: () => setIsLoading(false) },
+        );
+    };
+
     return (
         <Authenticated>
             <div className="flex w-full flex-col items-start gap-4 md:flex-row">
@@ -38,7 +63,9 @@ export default function PageView({ page }: { page: Page }) {
                                 <p className="font-bold">{page.name}</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-3xl font-black">
+                                <p
+                                    className={`text-3xl font-black ${page.average && page.average < 0 ? 'text-green-500' : 'text-red-500'}`}
+                                >
                                     {page.average
                                         ? parseFloat(
                                               page.average.toString(),
@@ -88,7 +115,7 @@ export default function PageView({ page }: { page: Page }) {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="border bg-gray-50 p-3 font-calligraphy dark:bg-zinc-900">
+                                <div className="font-calligraphy border bg-gray-50 p-3 dark:bg-zinc-900">
                                     <p className="text-2xl">
                                         {page.last_bottle_message.message}
                                     </p>
@@ -119,11 +146,38 @@ export default function PageView({ page }: { page: Page }) {
                                 <CardTitle>Hold up!</CardTitle>
                             </CardHeader>
                             <CardContent className="font-semibold">
-                                <p>Looks like this page is not claimed yet!</p>
-                                <p>
-                                    You have created this page for your friend,
-                                    send them this link and make them claim it.
+                                <p className="mb-2">
+                                    Looks like this page is not claimed yet!
                                 </p>
+                                {loggedUser && isLinkedPage && (
+                                    <p>
+                                        You have created this page for your
+                                        friend, send them this link and make
+                                        them claim it.
+                                    </p>
+                                )}
+                                {!loggedUser && !isLinkedPage && (
+                                    <Link
+                                        href="/login"
+                                        className={buttonVariants({
+                                            variant: 'default',
+                                        })}
+                                    >
+                                        Login
+                                    </Link>
+                                )}
+                                {loggedUser && !isLinkedPage && (
+                                    <Button
+                                        onClick={claim}
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <AiOutlineLoading3Quarters className="animate-spin" />
+                                        ) : (
+                                            'Claim'
+                                        )}
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
                     ) : (
@@ -167,7 +221,7 @@ export default function PageView({ page }: { page: Page }) {
                                                 RocketMessage
                                             </TabsContent>
                                             <TabsContent value="passes">
-                                                RocketMessage
+                                                <PassForm page={page} />
                                             </TabsContent>
                                             <TabsContent value="gifts">
                                                 Gifts

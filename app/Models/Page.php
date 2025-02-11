@@ -58,4 +58,9 @@ class Page extends Model
     {
         return $this->hasOne(QuickThought::class)->orderByDesc('created_at');
     }
+
+    public function passes(): HasMany
+    {
+        return $this->hasMany(Pass::class);
+    }
 }

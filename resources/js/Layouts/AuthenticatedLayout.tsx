@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 const navItems = [
     {
         name: 'Home',
-        href: '/',
+        href: '/dashboard',
     },
 ];
 
@@ -54,7 +54,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                             className="rounded-md px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
                             key={item.href}
                         >
-                            Home
+                            {item.name}
                         </Link>
                     ))}
                 </nav>

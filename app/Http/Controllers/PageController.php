@@ -57,6 +57,7 @@ class PageController extends Controller
     {
         $page->load([
             'user',
+            'linkedPage',
             'votes' => fn($qb) => $qb->orderByDesc('created_at'),
             'votes.user',
             'votes.comments' => fn($qb) => $qb->with('user')->orderByDesc('created_at'),
@@ -82,7 +83,27 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        //
+        $validatedData = $request->validate([
+            'operation' => 'required',
+        ]);
+
+        try {
+            if ($validatedData['operation'] === 'claim') {
+                if (!empty($page->user_id)) {
+                    return redirect()->back()->with('error', 'This page has already been claimed');
+                }
+                $page->user()->associate($request->user());
+                $page->save();
+            }
+        } catch (\Exception $exception) {
+            Log::error('Unable to update page', [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+            ]);
+            return redirect()->back()->with('error', 'Unable to update the page');
+        }
+
+        return redirect()->back();
     }
 
     /**
