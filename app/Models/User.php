@@ -51,7 +51,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Page::class);
     }
-    
+
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
@@ -70,5 +70,10 @@ class User extends Authenticatable
     public function quickThoughts(): HasMany
     {
         return $this->hasMany(QuickThought::class);
+    }
+
+    public function passes(): HasMany
+    {
+        return $this->hasMany(Pass::class);
     }
 }

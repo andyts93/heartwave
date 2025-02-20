@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::post('/bottle-message', [BottleMessageController::class, 'store'])->name('bottleMessage.store');
     Route::post('/quick-thought', [\App\Http\Controllers\QuickThoughtController::class, 'store'])->name('quick-thought.store');
+    Route::post('/pass', [\App\Http\Controllers\PassController::class, 'store'])->name('pass.store');
 });
 
 Route::get('/page/{page}', [PageController::class, 'show'])->name('page.show');

@@ -30,6 +30,7 @@ export interface Page {
     votes: Vote[];
     last_bottle_message?: BottleMessage;
     last_quick_thought?: QuickThought;
+    passes: Pass[];
 }
 
 export interface Vote {

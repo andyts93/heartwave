@@ -1,10 +1,12 @@
-import { Page } from '@/types';
+import { Page, Pass } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import EmojiPicker from 'emoji-picker-react';
 import { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { useForm } from 'react-hook-form';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import PassCard from '../PassCard';
 import { Button } from '../ui/button';
@@ -47,7 +49,17 @@ export default function PassForm({ page }: { page: Page }) {
     const colorRef = form.register('color');
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values);
+        setIsLoading(true);
+        router.post(
+            route('pass.store'),
+            {
+                ...values,
+                page_id: page.id,
+            },
+            {
+                onFinish: () => setIsLoading(false),
+            },
+        );
     };
 
     return (
@@ -202,10 +214,16 @@ export default function PassForm({ page }: { page: Page }) {
                             )}
                         ></FormField>
                     </div>
-                    <Button type="submit">Invia</Button>
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? (
+                            <AiOutlineLoading3Quarters className="animate-spin" />
+                        ) : (
+                            'Throw bottle'
+                        )}
+                    </Button>
                 </form>
             </Form>
-            <PassCard pass={form.watch()} />
+            <PassCard pass={form.watch() as unknown as Pass} />
         </div>
     );
 }

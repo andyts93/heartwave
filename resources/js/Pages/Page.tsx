@@ -2,6 +2,7 @@ import BottleMessageForm from '@/Components/forms/BottleMessageForm';
 import PassForm from '@/Components/forms/PassForm';
 import QuickThoughtForm from '@/Components/forms/QuickThoughtForm';
 import VoteForm from '@/Components/forms/VoteForm';
+import PassCard from '@/Components/PassCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
 import { Button, buttonVariants } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
@@ -115,7 +116,7 @@ export default function PageView({ page }: { page: Page }) {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="font-calligraphy border bg-gray-50 p-3 dark:bg-zinc-900">
+                                <div className="border bg-gray-50 p-3 font-calligraphy dark:bg-zinc-900">
                                     <p className="text-2xl">
                                         {page.last_bottle_message.message}
                                     </p>
@@ -222,6 +223,12 @@ export default function PageView({ page }: { page: Page }) {
                                             </TabsContent>
                                             <TabsContent value="passes">
                                                 <PassForm page={page} />
+                                                {page.passes.map((p) => (
+                                                    <PassCard
+                                                        pass={p}
+                                                        key={p.id}
+                                                    />
+                                                ))}
                                             </TabsContent>
                                             <TabsContent value="gifts">
                                                 Gifts
